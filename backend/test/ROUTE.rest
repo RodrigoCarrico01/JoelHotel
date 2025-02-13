@@ -1,0 +1,50 @@
+### Registar um user
+POST http://localhost:5000/api/auth/register
+Content-Type: application/json
+
+{
+    "name": "Rodrigo Martins",
+    "email": "rodrigo@gmail.com",
+    "password": "1231231",
+    "role": "user"
+} 
+### Login
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "rodrigo@gmail.com",
+    "password": "1231231"
+} 
+### Criar reservas (com token)
+POST http://localhost:5000/api/reservations
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YWRlMTlmZWViYWE0OGFiOGE3YjU2MSIsImlhdCI6MTczOTQ0OTE0MCwiZXhwIjoxNzQwMDUzOTQwfQ.zx1-ub_tAUb4mKQYLAbICLcyUCZu0N_8KZwsFnHVLFc
+
+{
+    "checkInDate": "2025-03-01",
+    "checkOutDate": "2025-03-07",
+    "roomNumber": "101",
+    "isPaid": false,
+    "status": "pendente"
+}
+### Listar reservas (com token)
+GET http://localhost:5000/api/reservations
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YWRlMTlmZWViYWE0OGFiOGE3YjU2MSIsImlhdCI6MTczOTQ0OTE0MCwiZXhwIjoxNzQwMDUzOTQwfQ.zx1-ub_tAUb4mKQYLAbICLcyUCZu0N_8KZwsFnHVLFc
+
+### Atualizar reservas (com token)
+PUT http://localhost:5000/api/reservations/67ade33db059f39455fd8c53
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YWRlMTlmZWViYWE0OGFiOGE3YjU2MSIsImlhdCI6MTczOTQ0OTE0MCwiZXhwIjoxNzQwMDUzOTQwfQ.zx1-ub_tAUb4mKQYLAbICLcyUCZu0N_8KZwsFnHVLFc
+
+{
+    "checkInDate": "2025-03-02",
+    "checkOutDate": "2025-03-08",
+    "roomNumber": "102",
+    "isPaid": true,
+    "status": "confirmada"
+}
+### Deletar Reservas (com token)
+DELETE http://localhost:5000/api/reservations/67ade33db059f39455fd8c53
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YWRlMTlmZWViYWE0OGFiOGE3YjU2MSIsImlhdCI6MTczOTQ0OTE0MCwiZXhwIjoxNzQwMDUzOTQwfQ.zx1-ub_tAUb4mKQYLAbICLcyUCZu0N_8KZwsFnHVLFc
+
