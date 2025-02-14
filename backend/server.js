@@ -6,6 +6,7 @@ const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const roomRoutes = require("./routes/roomRoutes");
+const reservationRoutes = require("./routes/reservationRoutes");
 
 // Configurações iniciais
 dotenv.config();
@@ -21,6 +22,7 @@ app.use(morgan("dev"));
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/rooms", roomRoutes);
+app.use("/api/reservations", reservationRoutes);
 
 // Porta do servidor
 const PORT = process.env.PORT || 5000;

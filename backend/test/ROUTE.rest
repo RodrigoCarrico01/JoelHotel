@@ -3,38 +3,41 @@ POST http://localhost:5000/api/auth/register
 Content-Type: application/json
 
 {
-    "nome": "Rodrigo Martins",
-    "email": "rodrigo@gmail.com",
-    "password": "123456"
+    "nome": "Admin",
+    "email": "admin@gmail.com",
+    "password": "admin123",
+    "role": "admin"
 }
+
 ### Login AUTH
 POST http://localhost:5000/api/auth/login
 Content-Type: application/json
 
 {
-    "email": "rodrigo@gmail.com",
-    "password": "123456"
+    "email": "admin@gmail.com",
+    "password": "admin123"
 }
+
 ### Obter USER
 GET http://localhost:5000/api/users/profile
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YWY0NWU4NzA5Yjc2OGI5NjUzYTk2ZiIsImlhdCI6MTczOTU0MDI4MywiZXhwIjoxNzQwMTQ1MDgzfQ.YtssricRtX_NhuWjHw2M_vy911oa22v2znL2P8rUeYc
-### Atualizar USER 
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YWY1MWNmYmM1ZWZkNzhmZDE3MmZhMSIsImlhdCI6MTczOTU0MzAwMSwiZXhwIjoxNzQwMTQ3ODAxfQ.fW8t8bn9stKh0sMQ_HgPL7vklZoyk2oIs-IX_Vkg-54
+### Atualizar USER
 PUT http://localhost:5000/api/users/profile
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YWY0NWU4NzA5Yjc2OGI5NjUzYTk2ZiIsImlhdCI6MTczOTU0MDI4MywiZXhwIjoxNzQwMTQ1MDgzfQ.YtssricRtX_NhuWjHw2M_vy911oa22v2znL2P8rUeYc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YWY1Mjg4YmM1ZWZkNzhmZDE3MmZjOCIsImlhdCI6MTczOTU0MzI1MywiZXhwIjoxNzQwMTQ4MDUzfQ.eC3WMiec0WGGQYujnG-1qQ71IqOcIO-4pSTgZDXJ5FQ
 
 {
-    "nome": "Rodrigo Atualizado",
-    "email": "rodrigo_novo@email.com",
-    "profilePic": "https://example.com/nova-foto.png"
+    "nome": "João Feijão Meireles",
 }
+
 ### Eliminar USER
 DELETE http://localhost:5000/api/users/profile
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YWY0NWU4NzA5Yjc2OGI5NjUzYTk2ZiIsImlhdCI6MTczOTU0MDI4MywiZXhwIjoxNzQwMTQ1MDgzfQ.YtssricRtX_NhuWjHw2M_vy911oa22v2znL2P8rUeYc
+Authorization: Bearer <TOKEN_AQUI>
+
 ### Criar ROOM (admin required)
 POST http://localhost:5000/api/rooms
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YWY0NWU4NzA5Yjc2OGI5NjUzYTk2ZiIsImlhdCI6MTczOTU0MDI4MywiZXhwIjoxNzQwMTQ1MDgzfQ.YtssricRtX_NhuWjHw2M_vy911oa22v2znL2P8rUeYc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YWY1Mjg4YmM1ZWZkNzhmZDE3MmZjOCIsImlhdCI6MTczOTU0MzM5MSwiZXhwIjoxNzQwMTQ4MTkxfQ.92VpzMN1yAIj7LatY7YHpdVb1EIAQXGEVUIA8j6jtd4
 
 {
     "nome": "Suite Premium",
@@ -44,3 +47,55 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YWY0NWU4N
     "precoPorNoite": 250,
     "status": "disponível"
 }
+
+### Listar todos os ROOMS
+GET http://localhost:5000/api/rooms
+
+### Obter um ROOM pelo ID
+GET http://localhost:5000/api/rooms/<ID_DO_QUARTO>
+
+### Atualizar um ROOM (admin required)
+PUT http://localhost:5000/api/rooms/<ID_DO_QUARTO>
+Content-Type: application/json
+Authorization: Bearer <TOKEN_ADMIN_AQUI>
+
+{
+    "precoPorNoite": 180
+}
+
+### Eliminar um ROOM (admin required)
+DELETE http://localhost:5000/api/rooms/<ID_DO_QUARTO>
+Authorization: Bearer <TOKEN_ADMIN_AQUI>
+
+### Criar RESERVA
+POST http://localhost:5000/api/reservations
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YWY1Mjg4YmM1ZWZkNzhmZDE3MmZjOCIsImlhdCI6MTczOTU0MzU0MywiZXhwIjoxNzQwMTQ4MzQzfQ.TMuMf-7-qT7jJ-kNOxYaI4ISD0AGYoBelYXi0rbdUzk
+
+{
+    "quarto": "67af5373f3e4ab80ff9300d8",
+    "dataCheckIn": "2025-03-01",
+    "dataCheckOut": "2025-03-07"
+}
+
+### Listar RESERVAS do utilizador autenticado
+GET http://localhost:5000/api/reservations
+Authorization: Bearer <TOKEN_AQUI>
+
+### Obter detalhes de uma RESERVA
+GET http://localhost:5000/api/reservations/67af5409f3e4ab80ff9300dd
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YWY1Mjg4YmM1ZWZkNzhmZDE3MmZjOCIsImlhdCI6MTczOTU0MzU0MywiZXhwIjoxNzQwMTQ4MzQzfQ.TMuMf-7-qT7jJ-kNOxYaI4ISD0AGYoBelYXi0rbdUzk
+
+### Atualizar RESERVA (pode ser usada para marcar como paga)
+PUT http://localhost:5000/api/reservations/67af5409f3e4ab80ff9300dd
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YWY1Mjg4YmM1ZWZkNzhmZDE3MmZjOCIsImlhdCI6MTczOTU0MzU0MywiZXhwIjoxNzQwMTQ4MzQzfQ.TMuMf-7-qT7jJ-kNOxYaI4ISD0AGYoBelYXi0rbdUzk
+
+{
+    "pago": true,
+    "status": "confirmada"
+}
+
+### Cancelar uma RESERVA
+DELETE http://localhost:5000/api/reservations/<ID_DA_RESERVA>
+Authorization: Bearer <TOKEN_AQUI>
