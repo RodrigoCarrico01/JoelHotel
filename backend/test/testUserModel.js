@@ -6,8 +6,8 @@ dotenv.config();
 
 // Conectar ao MongoDB
 mongoose.connect(process.env.MONGO_URI)
-    .then(() => console.log("🔥 Conectado ao MongoDB"))
-    .catch((err) => console.error("❌ Erro ao conectar ao MongoDB:", err));
+    .then(() => console.log(" Conectado ao MongoDB"))
+    .catch((err) => console.error(" Erro ao conectar ao MongoDB:", err));
 
 const testUserModel = async () => {
     try {
@@ -21,10 +21,10 @@ const testUserModel = async () => {
         });
 
         await user.save();
-        console.log("✅ Utilizador criado com sucesso:", user);
+        console.log(" Utilizador criado com sucesso:", user);
 
     } catch (error) {
-        console.error("❌ Erro ao testar o modelo de utilizador:", error);
+        console.error(" Erro ao testar o modelo de utilizador:", error);
     } finally {
         mongoose.connection.close(); // Fecha a conexão após o teste
     }
@@ -32,4 +32,3 @@ const testUserModel = async () => {
 
 // Executar o teste
 testUserModel();
-    
