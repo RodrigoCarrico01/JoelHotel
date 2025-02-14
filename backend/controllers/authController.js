@@ -2,6 +2,7 @@ const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
+//**Criar conta **
 const registerUser = async (req, res) => {
     try {
         const { nome, email, password } = req.body;
@@ -25,7 +26,7 @@ const registerUser = async (req, res) => {
         res.status(500).json({ message: "Erro ao registar utilizador.", error });
     }
 };
-
+// **Entrar na conta**
 const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -48,6 +49,7 @@ const loginUser = async (req, res) => {
     }
 };
 
+//**Gerar token**
 const generateToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "7d" });
 };

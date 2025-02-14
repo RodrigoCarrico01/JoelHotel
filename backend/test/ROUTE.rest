@@ -18,7 +18,7 @@ Content-Type: application/json
 ### Obter USER
 GET http://localhost:5000/api/users/profile
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YWY0NWU4NzA5Yjc2OGI5NjUzYTk2ZiIsImlhdCI6MTczOTU0MDI4MywiZXhwIjoxNzQwMTQ1MDgzfQ.YtssricRtX_NhuWjHw2M_vy911oa22v2znL2P8rUeYc
-### Atualizar USER
+### Atualizar USER 
 PUT http://localhost:5000/api/users/profile
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YWY0NWU4NzA5Yjc2OGI5NjUzYTk2ZiIsImlhdCI6MTczOTU0MDI4MywiZXhwIjoxNzQwMTQ1MDgzfQ.YtssricRtX_NhuWjHw2M_vy911oa22v2znL2P8rUeYc
@@ -31,3 +31,16 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YWY0NWU4N
 ### Eliminar USER
 DELETE http://localhost:5000/api/users/profile
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YWY0NWU4NzA5Yjc2OGI5NjUzYTk2ZiIsImlhdCI6MTczOTU0MDI4MywiZXhwIjoxNzQwMTQ1MDgzfQ.YtssricRtX_NhuWjHw2M_vy911oa22v2znL2P8rUeYc
+### Criar ROOM (admin required)
+POST http://localhost:5000/api/rooms
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YWY0NWU4NzA5Yjc2OGI5NjUzYTk2ZiIsImlhdCI6MTczOTU0MDI4MywiZXhwIjoxNzQwMTQ1MDgzfQ.YtssricRtX_NhuWjHw2M_vy911oa22v2znL2P8rUeYc
+
+{
+    "nome": "Suite Premium",
+    "descricao": "Quarto de luxo com jacuzzi.",
+    "imagem": "https://example.com/suite-premium.jpg",
+    "numeroQuarto": "202",
+    "precoPorNoite": 250,
+    "status": "disponível"
+}
