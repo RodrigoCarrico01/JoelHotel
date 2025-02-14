@@ -3,6 +3,8 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const morgan = require("morgan");
 const connectDB = require("./config/db");
+const authRoutes = require("./routes/authRoutes");
+const userRoutes = require("./routes/userRoutes");
 
 // Configurações iniciais
 dotenv.config();
@@ -14,10 +16,9 @@ app.use(express.json());
 app.use(cors());
 app.use(morgan("dev"));
 
-// Rota inicial de teste
-app.get("/", (req, res) => {
-    res.send("API do JoelHotel está a funcionar!");
-});
+// Rotas
+app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
 
 // Porta do servidor
 const PORT = process.env.PORT || 5000;

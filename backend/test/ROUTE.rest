@@ -1,0 +1,33 @@
+### Register AUTH
+POST http://localhost:5000/api/auth/register
+Content-Type: application/json
+
+{
+    "nome": "Rodrigo Martins",
+    "email": "rodrigo@gmail.com",
+    "password": "123456"
+}
+### Login AUTH
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "rodrigo@gmail.com",
+    "password": "123456"
+}
+### Obter USER
+GET http://localhost:5000/api/users/profile
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YWY0NWU4NzA5Yjc2OGI5NjUzYTk2ZiIsImlhdCI6MTczOTU0MDI4MywiZXhwIjoxNzQwMTQ1MDgzfQ.YtssricRtX_NhuWjHw2M_vy911oa22v2znL2P8rUeYc
+### Atualizar USER
+PUT http://localhost:5000/api/users/profile
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YWY0NWU4NzA5Yjc2OGI5NjUzYTk2ZiIsImlhdCI6MTczOTU0MDI4MywiZXhwIjoxNzQwMTQ1MDgzfQ.YtssricRtX_NhuWjHw2M_vy911oa22v2znL2P8rUeYc
+
+{
+    "nome": "Rodrigo Atualizado",
+    "email": "rodrigo_novo@email.com",
+    "profilePic": "https://example.com/nova-foto.png"
+}
+### Eliminar USER
+DELETE http://localhost:5000/api/users/profile
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YWY0NWU4NzA5Yjc2OGI5NjUzYTk2ZiIsImlhdCI6MTczOTU0MDI4MywiZXhwIjoxNzQwMTQ1MDgzfQ.YtssricRtX_NhuWjHw2M_vy911oa22v2znL2P8rUeYc
