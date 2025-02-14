@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 
 const UserSchema = new mongoose.Schema(
     {
-        name: {
+        nome: {
             type: String,
             required: [true, "O nome é obrigatório"],
         },
@@ -18,19 +18,19 @@ const UserSchema = new mongoose.Schema(
         },
         password: {
             type: String,
-            required: [true, "A senha é obrigatória"],
+            required: [true, "A palavra-passe é obrigatória"],
             minlength: 6,
         },
         role: {
             type: String,
-            enum: ["admin", "user"],
-            default: "user",
+            enum: ["admin", "utilizador"],
+            default: "utilizador",
         },
     },
     { timestamps: true }
 );
 
-// Hash da senha antes de salvar
+// **Antes de guardar, encriptamos a palavra-passe**
 UserSchema.pre("save", async function (next) {
     if (!this.isModified("password")) return next();
     const salt = await bcrypt.genSalt(10);
@@ -39,10 +39,3 @@ UserSchema.pre("save", async function (next) {
 });
 
 module.exports = mongoose.model("User", UserSchema);
-
-
-// 📌 Explicação
-//  name, email e password são campos obrigatórios.
-// email é único e validado com um regex.
-// role pode ser "admin" ou "user", padrão é "user".
-// Antes de salvar, a senha é hashada com bcrypt para segurança.
