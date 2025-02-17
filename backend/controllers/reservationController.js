@@ -12,7 +12,7 @@ const createReservation = async (req, res) => {
             return res.status(404).json({ message: "Quarto não encontrado." });
         }
 
-        // Criar a reserva
+        // Criar a reserva  
         const reservation = new Reservation({
             utilizador: req.user._id,
             quarto,
@@ -52,29 +52,6 @@ const getReservationById = async (req, res) => {
     }
 };
 
-// **Atualizar uma reserva**
-const updateReservation = async (req, res) => {
-    try {
-        const { status, pago } = req.body;
-        const reservation = await Reservation.findById(req.params.id);
-        if (!reservation) {
-            return res.status(404).json({ message: "Reserva não encontrada." });
-        }
-
-        // Apenas o utilizador dono da reserva ou um admin pode atualizá-la
-        if (reservation.utilizador.toString() !== req.user._id.toString() && req.user.role !== "admin") {
-            return res.status(403).json({ message: "Não autorizado." });
-        }
-
-        reservation.status = status || reservation.status;
-        reservation.pago = pago !== undefined ? pago : reservation.pago;
-
-        const updatedReservation = await reservation.save();
-        res.json(updatedReservation);
-    } catch (error) {
-        res.status(500).json({ message: "Erro ao atualizar reserva.", error });
-    }
-};
 
 // **Eliminar uma reserva**
 const deleteReservation = async (req, res) => {
@@ -96,4 +73,4 @@ const deleteReservation = async (req, res) => {
     }
 };
 
-module.exports = { createReservation, getUserReservations, getReservationById, updateReservation, deleteReservation };
+module.exports = { createReservation, getUserReservations, getReservationById, deleteReservation };

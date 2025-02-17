@@ -10,6 +10,8 @@ const reservationRoutes = require("./routes/reservationRoutes");
 const reviewRoutes = require("./routes/reviewRoutes");
 const adminUserRoutes = require("./routes/Admin/userRoutes");
 const adminRoomRoutes = require("./routes/Admin/roomRoutes");
+const adminReservationRoutes = require("./routes/Admin/reservationRoutes");
+const adminReviewRoutes = require("./routes/Admin/reviewRoutes");
 
 // Configurações iniciais
 dotenv.config();
@@ -31,6 +33,8 @@ app.use("/api/reviews", reviewRoutes);
 //Rotas Admin
 app.use("/api/admin/users", adminUserRoutes);
 app.use("/api/admin/rooms", adminRoomRoutes);
+app.use("/api/admin/reservations", adminReservationRoutes);
+app.use("/api/admin/reviews", adminReviewRoutes);
 
 
 // Porta do servidor

@@ -64,4 +64,27 @@ const deleteRoom = async (req, res) => {
     }
 };
 
-module.exports = { createRoom, updateRoom, deleteRoom };
+// **Listar todos os quartos (apenas admins)**
+const getAllRooms = async (req, res) => {
+    try {
+        const rooms = await Room.find();
+        res.json(rooms);
+    } catch (error) {
+        res.status(500).json({ message: "Erro ao listar quartos.", error });
+    }
+};
+
+// **Obter um quarto por ID (apenas admins)**
+const getRoomByIdAdmin = async (req, res) => {
+    try {
+        const room = await Room.findById(req.params.id);
+        if (!room) {
+            return res.status(404).json({ message: "Quarto não encontrado." });
+        }
+        res.json(room);
+    } catch (error) {
+        res.status(500).json({ message: "Erro ao obter quarto.", error });
+    }
+};
+
+module.exports = { createRoom, updateRoom, deleteRoom, getAllRooms, getRoomByIdAdmin };
