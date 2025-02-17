@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const Review = require("../models/Review");
 const Room = require("../models/Room");
 
@@ -42,7 +43,36 @@ const getReviewsByRoom = async (req, res) => {
         res.status(500).json({ message: "Erro ao listar reviews.", error });
     }
 };
+// **Atualizar uma review**
+const updateReview = async (req, res) => {
+    try {
+        const { classificacao, comentario } = req.body;
+        const reviewId = req.params.id.trim(); // Remover espaços e quebras de linha
 
+        // Verificar se o ID é válido
+        if (!mongoose.Types.ObjectId.isValid(reviewId)) {
+            return res.status(400).json({ message: "ID da review inválido." });
+        }
+
+        const review = await Review.findById(reviewId);
+        if (!review) {
+            return res.status(404).json({ message: "Review não encontrada." });
+        }
+
+        // Apenas o autor da review pode editá-la
+        if (review.utilizador.toString() !== req.user._id.toString()) {
+            return res.status(403).json({ message: "Não autorizado." });
+        }
+
+        review.classificacao = classificacao || review.classificacao;
+        review.comentario = comentario || review.comentario;
+
+        const updatedReview = await review.save();
+        res.json(updatedReview);
+    } catch (error) {
+        res.status(500).json({ message: "Erro ao atualizar review.", error });
+    }
+};
 // **Eliminar uma review**
 const deleteReview = async (req, res) => {
     try {
@@ -63,4 +93,4 @@ const deleteReview = async (req, res) => {
     }
 };
 
-module.exports = { createReview, getReviewsByRoom, deleteReview };
+module.exports = { createReview, getReviewsByRoom, updateReview, deleteReview };

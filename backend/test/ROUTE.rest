@@ -3,8 +3,8 @@ POST http://localhost:5000/api/auth/register
 Content-Type: application/json
 
 {
-    "nome": "Batista",
-    "email": "batista@gmail.com",
+    "nome": "Rui",
+    "email": "rui@gmail.com",
     "password": "123456",
     "role": "utilizador"
 }
@@ -14,8 +14,8 @@ POST http://localhost:5000/api/auth/login
 Content-Type: application/json  
 
 {
-    "email": "batista@gmail.com",
-    "password": "123456"
+    "email": "admin@gmail.com",
+    "password": "admin123"
 }
 
 ### Obter USER
@@ -114,7 +114,15 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YWY1Mjg4Y
 
 ### Listar todas as REVIEWS de um quarto
 GET http://localhost:5000/api/reviews/67af5373f3e4ab80ff9300d8
+### Atualizar a review
+PUT http://localhost:5000/api/reviews/<ID_DA_REVIEW>
+Content-Type: application/json
+Authorization: Bearer <TOKEN>
 
+{
+    "classificacao": 4,
+    "comentario": "Gostei muito, mas acho que poderia ser melhor."
+}
 ### Eliminar uma REVIEW
 DELETE http://localhost:5000/api/reviews/<ID_DA_REVIEW>
 Authorization: Bearer <TOKEN_AQUI>
