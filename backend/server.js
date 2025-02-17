@@ -8,6 +8,8 @@ const userRoutes = require("./routes/userRoutes");
 const roomRoutes = require("./routes/roomRoutes");
 const reservationRoutes = require("./routes/reservationRoutes");
 const reviewRoutes = require("./routes/reviewRoutes");
+const adminUserRoutes = require("./routes/Admin/userRoutes");
+const adminRoomRoutes = require("./routes/Admin/roomRoutes");
 
 // Configurações iniciais
 dotenv.config();
@@ -16,7 +18,7 @@ const app = express();
 
 // Middlewares
 app.use(express.json());    
-app.use(cors());
+app.use(cors());    
 app.use(morgan("dev"));
 
 // Rotas
@@ -25,6 +27,11 @@ app.use("/api/users", userRoutes);
 app.use("/api/rooms", roomRoutes);
 app.use("/api/reservations", reservationRoutes);
 app.use("/api/reviews", reviewRoutes);
+
+//Rotas Admin
+app.use("/api/admin/users", adminUserRoutes);
+app.use("/api/admin/rooms", adminRoomRoutes);
+
 
 // Porta do servidor
 const PORT = process.env.PORT || 5000;
