@@ -1,128 +1,211 @@
-### Register AUTH
+# =================== AUTENTICAÇÃO ===================
+
+### Registar um utilizador
 POST http://localhost:5000/api/auth/register
 Content-Type: application/json
 
 {
-    "nome": "Rui",
-    "email": "rui@gmail.com",
-    "password": "123456",
-    "role": "utilizador"
+    "nome": "Rodrigo Martins",
+    "email": "rodrigo@gmail.com",
+    "password": "123456"
 }
 
-### Login AUTH
+### Login de utilizador
 POST http://localhost:5000/api/auth/login
-Content-Type: application/json  
+Content-Type: application/json
 
 {
-    "email": "admin@gmail.com",
-    "password": "admin123"
+    "email": "rodrigo@gmail.com",
+    "password": "123456"
 }
 
-### Obter USER
-GET http://localhost:5000/api/users/profile
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YWY1Mjg4YmM1ZWZkNzhmZDE3MmZjOCIsImlhdCI6MTczOTU0NDExNiwiZXhwIjoxNzQwMTQ4OTE2fQ.qKvJzmTslgI97FiN-neAmSwlRZ1DZQEoEfYriU09aCs
+# ===================================================
+# =================== UTILIZADORES ===================
+# ===================================================
 
-### Atualizar USER
+### Obter perfil do utilizador autenticado
+GET http://localhost:5000/api/users/profile
+Authorization: Bearer <TOKEN>
+
+### Atualizar perfil do utilizador autenticado
 PUT http://localhost:5000/api/users/profile
 Content-Type: application/json
-Authorization: Bearer <TOKEN_AQUI>
+Authorization: Bearer <TOKEN>
 
 {
-    "nome": "João Feijão Meireles"
+    "nome": "Rodrigo Atualizado",
+    "email": "rodrigo_novo@email.com",
+    "profilePic": "https://example.com/nova-foto.png"
 }
 
-### Eliminar USER
+### Eliminar a conta do utilizador autenticado
 DELETE http://localhost:5000/api/users/profile
-Authorization: Bearer <TOKEN_AQUI>
+Authorization: Bearer <TOKEN>
 
-### Criar ROOM (admin required)
-POST http://localhost:5000/api/rooms
+# ===================================================
+# ============== GESTÃO DE UTILIZADORES (ADMIN) ==============
+# ===================================================
+
+### Listar todos os utilizadores (ADMIN)
+GET http://localhost:5000/api/admin/users
+Authorization: Bearer <TOKEN_ADMIN>
+
+### Obter um utilizador por ID (ADMIN)
+GET http://localhost:5000/api/admin/users/<ID_DO_UTILIZADOR>
+Authorization: Bearer <TOKEN_ADMIN>
+
+### Eliminar um utilizador (ADMIN)
+DELETE http://localhost:5000/api/admin/users/<ID_DO_UTILIZADOR>
+Authorization: Bearer <TOKEN_ADMIN>
+
+# ===================================================
+# =================== QUARTOS ===================
+# ===================================================
+
+### Criar um quarto (ADMIN)
+POST http://localhost:5000/api/admin/rooms
 Content-Type: application/json
-Authorization: Bearer <TOKEN_ADMIN_AQUI>
+Authorization: Bearer <TOKEN_ADMIN>
 
 {
-    "nome": "Suite Premium",
-    "descricao": "Quarto de luxo com jacuzzi.",
-    "imagem": "https://example.com/suite-premium.jpg",
-    "numeroQuarto": "202",
-    "precoPorNoite": 250,
+    "nome": "Suite Luxo",
+    "descricao": "Quarto espaçoso com vista para o mar.",
+    "imagem": "https://example.com/suite-luxo.jpg",
+    "numeroQuarto": "101",
+    "precoPorNoite": 150,
     "status": "disponível"
 }
 
-### Listar todos os ROOMS
+### Listar todos os quartos (PÚBLICO)
 GET http://localhost:5000/api/rooms
 
-### Obter um ROOM pelo ID
+### Obter um quarto por ID (PÚBLICO)
 GET http://localhost:5000/api/rooms/<ID_DO_QUARTO>
 
-### Atualizar um ROOM (admin required)
-PUT http://localhost:5000/api/rooms/<ID_DO_QUARTO>
+### Listar todos os quartos (ADMIN)
+GET http://localhost:5000/api/admin/rooms
+Authorization: Bearer <TOKEN_ADMIN>
+
+### Obter um quarto por ID (ADMIN)
+GET http://localhost:5000/api/admin/rooms/<ID_DO_QUARTO>
+Authorization: Bearer <TOKEN_ADMIN>
+
+### Atualizar um quarto (ADMIN)
+PUT http://localhost:5000/api/admin/rooms/<ID_DO_QUARTO>
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YWY1Mjg4YmM1ZWZkNzhmZDE3MmZjOCIsImlhdCI6MTczOTU0NDExNiwiZXhwIjoxNzQwMTQ4OTE2fQ.qKvJzmTslgI97FiN-neAmSwlRZ1DZQEoEfYriU09aCs
+Authorization: Bearer <TOKEN_ADMIN>
 
 {
     "precoPorNoite": 180
 }
 
-### Eliminar um ROOM (admin required)
-DELETE http://localhost:5000/api/rooms/<ID_DO_QUARTO>
-Authorization: Bearer <TOKEN_ADMIN_AQUI>
+### Eliminar um quarto (ADMIN)
+DELETE http://localhost:5000/api/admin/rooms/<ID_DO_QUARTO>
+Authorization: Bearer <TOKEN_ADMIN>
 
-### Criar RESERVA
+# ===================================================
+# =================== RESERVAS ===================
+# ===================================================
+
+### Criar uma reserva (UTILIZADOR)
 POST http://localhost:5000/api/reservations
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YWY1OTE2ZDcyYzIyZDkzZWI2MmVhMCIsImlhdCI6MTczOTU0NDg1NiwiZXhwIjoxNzQwMTQ5NjU2fQ.zkAVs3yXZSi0V7WFl6jjko8F8HL32BaGPlaMPwv15UY
-
-{
-    "quarto": "67af5373f3e4ab80ff9300d8",
-    "dataCheckIn": "2025-03-08",
-    "dataCheckOut": "2025-03-08"
-}
-
-### Listar RESERVAS do utilizador autenticado
-GET http://localhost:5000/api/reservations
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YWY1Mjg4YmM1ZWZkNzhmZDE3MmZjOCIsImlhdCI6MTczOTU0NDExNiwiZXhwIjoxNzQwMTQ4OTE2fQ.qKvJzmTslgI97FiN-neAmSwlRZ1DZQEoEfYriU09aCs
-
-### Obter detalhes de uma RESERVA
-GET http://localhost:5000/api/reservations/<ID_DA_RESERVA>
-Authorization: Bearer <TOKEN_AQUI>
-
-### Atualizar RESERVA (pode ser usada para marcar como paga)
-PUT http://localhost:5000/api/reservations/<ID_DA_RESERVA>
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YWY1Mjg4YmM1ZWZkNzhmZDE3MmZjOCIsImlhdCI6MTczOTU0NDExNiwiZXhwIjoxNzQwMTQ4OTE2fQ.qKvJzmTslgI97FiN-neAmSwlRZ1DZQEoEfYriU09aCs
-
-{
-    "pago": true,
-    "status": "confirmada"
-}
-
-### Cancelar uma RESERVA
-DELETE http://localhost:5000/api/reservations/67af5491f3e4ab80ff9300fc
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YWY1Mjg4YmM1ZWZkNzhmZDE3MmZjOCIsImlhdCI6MTczOTU0NDExNiwiZXhwIjoxNzQwMTQ4OTE2fQ.qKvJzmTslgI97FiN-neAmSwlRZ1DZQEoEfYriU09aCs
-
-### Criar REVIEW
-POST http://localhost:5000/api/reviews
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3YWY1Mjg4YmM1ZWZkNzhmZDE3MmZjOCIsImlhdCI6MTczOTU0NDExNiwiZXhwIjoxNzQwMTQ4OTE2fQ.qKvJzmTslgI97FiN-neAmSwlRZ1DZQEoEfYriU09aCs
-
-{
-    "quarto": "67af5373f3e4ab80ff9300d8",
-    "classificacao": 5,
-    "comentario": "Ótima estadia, recomendo!"
-}
-
-### Listar todas as REVIEWS de um quarto
-GET http://localhost:5000/api/reviews/67af5373f3e4ab80ff9300d8
-### Atualizar a review
-PUT http://localhost:5000/api/reviews/<ID_DA_REVIEW>
 Content-Type: application/json
 Authorization: Bearer <TOKEN>
 
 {
-    "classificacao": 4,
-    "comentario": "Gostei muito, mas acho que poderia ser melhor."
+    "quarto": "<ID_DO_QUARTO>",
+    "dataCheckIn": "2025-03-01",
+    "dataCheckOut": "2025-03-07"
 }
-### Eliminar uma REVIEW
+
+### Listar reservas do utilizador autenticado
+GET http://localhost:5000/api/reservations
+Authorization: Bearer <TOKEN>
+
+### Obter detalhes de uma reserva específica do utilizador autenticado
+GET http://localhost:5000/api/reservations/<ID_DA_RESERVA>
+Authorization: Bearer <TOKEN>
+
+### Cancelar uma reserva do utilizador autenticado
+DELETE http://localhost:5000/api/reservations/<ID_DA_RESERVA>
+Authorization: Bearer <TOKEN>
+
+# ===================================================
+# =========== GESTÃO DE RESERVAS (ADMIN) ===========
+# ===================================================
+
+### Listar todas as reservas (ADMIN)
+GET http://localhost:5000/api/admin/reservations
+Authorization: Bearer <TOKEN_ADMIN>
+
+### Obter uma reserva por ID (ADMIN)
+GET http://localhost:5000/api/admin/reservations/<ID_DA_RESERVA>
+Authorization: Bearer <TOKEN_ADMIN>
+
+### Obter reservas por utilizador (ADMIN)
+GET http://localhost:5000/api/admin/reservations/user/<ID_DO_UTILIZADOR>
+Authorization: Bearer <TOKEN_ADMIN>
+
+### Obter reservas por quarto (ADMIN)
+GET http://localhost:5000/api/admin/reservations/room/<ID_DO_QUARTO>
+Authorization: Bearer <TOKEN_ADMIN>
+
+### Atualizar uma reserva (ADMIN) - Alterar status e pagamento
+PUT http://localhost:5000/api/admin/reservations/<ID_DA_RESERVA>
+Content-Type: application/json
+Authorization: Bearer <TOKEN_ADMIN>
+
+{
+    "status": "confirmada",
+    "pago": true
+}
+
+### Eliminar uma reserva (ADMIN)
+DELETE http://localhost:5000/api/admin/reservations/<ID_DA_RESERVA>
+Authorization: Bearer <TOKEN_ADMIN>
+
+# ===================================================
+# =================== REVIEWS ===================
+# ===================================================
+
+### Criar uma review (UTILIZADOR)
+POST http://localhost:5000/api/reviews
+Content-Type: application/json
+Authorization: Bearer <TOKEN>
+
+{
+    "quarto": "<ID_DO_QUARTO>",
+    "classificacao": 5,
+    "comentario": "Ótima estadia, recomendo!"
+}
+
+### Listar todas as reviews de um quarto
+GET http://localhost:5000/api/reviews/<ID_DO_QUARTO>
+
+### Eliminar uma review do próprio utilizador
 DELETE http://localhost:5000/api/reviews/<ID_DA_REVIEW>
-Authorization: Bearer <TOKEN_AQUI>
+Authorization: Bearer <TOKEN>
+
+# ===================================================
+# ========== GESTÃO DE REVIEWS (ADMIN) ==========
+# ===================================================
+
+### Listar todas as reviews (ADMIN)
+GET http://localhost:5000/api/admin/reviews
+Authorization: Bearer <TOKEN_ADMIN>
+
+### Obter uma review por ID (ADMIN)
+GET http://localhost:5000/api/admin/reviews/<ID_DA_REVIEW>
+Authorization: Bearer <TOKEN_ADMIN>
+
+### Obter reviews de um quarto (ADMIN)
+GET http://localhost:5000/api/admin/reviews/room/<ID_DO_QUARTO>
+Authorization: Bearer <TOKEN_ADMIN>
+
+### Obter reviews de um utilizador (ADMIN)
+GET http://localhost:5000/api/admin/reviews/user/<ID_DO_UTILIZADOR>
+Authorization: Bearer <TOKEN_ADMIN>
+
+### Eliminar uma review (ADMIN)
+DELETE http://localhost:5000/api/admin/reviews/<ID_DA_REVIEW>
+Authorization: Bearer <TOKEN_ADMIN>
