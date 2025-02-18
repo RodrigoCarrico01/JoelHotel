@@ -23,6 +23,7 @@ function Navbar() {
           <>
             <li><Link to="/dashboard">Dashboard</Link></li>
             <li><Link to="/profile">Meu Perfil</Link></li>
+            <li><Link to="/my-reservations">Minhas Reservas</Link></li>
             <li><button onClick={handleLogout}>Logout</button></li>
           </>
         )}

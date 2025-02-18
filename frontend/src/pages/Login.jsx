@@ -1,49 +1,38 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Notification from "../components/Notification";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [notification, setNotification] = useState({ message: "", type: "" });
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError("");
+    setNotification({ message: "", type: "" });
 
     try {
-      const response = await axios.post("http://localhost:5000/api/auth/login", {
-        email,
-        password,
-      });
+      const response = await axios.post("http://localhost:5000/api/auth/login", { email, password });
 
       localStorage.setItem("token", response.data.token);
-      navigate("/dashboard"); // Redireciona após login bem-sucedido
+      setNotification({ message: "Login bem-sucedido! Redirecionando...", type: "success" });
+
+      setTimeout(() => navigate("/dashboard"), 2000);
     } catch (err) {
-      setError("Credenciais inválidas. Tente novamente.");
+      setNotification({ message: "Credenciais inválidas. Tente novamente.", type: "error" });
     }
   };
 
   return (
     <div>
+      <Notification message={notification.message} type={notification.type} onClose={() => setNotification({ message: "", type: "" })} />
+
       <h2>Login</h2>
-      {error && <p style={{ color: "red" }}>{error}</p>}
       <form onSubmit={handleLogin}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+        <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+        <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
         <button type="submit">Entrar</button>
       </form>
     </div>

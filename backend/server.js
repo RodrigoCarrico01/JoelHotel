@@ -1,4 +1,5 @@
 const express = require("express");
+const bodyParser = require("body-parser")
 const dotenv = require("dotenv");
 const cors = require("cors");
 const morgan = require("morgan");
@@ -17,6 +18,10 @@ const adminReviewRoutes = require("./routes/Admin/reviewRoutes");
 dotenv.config();
 connectDB();
 const app = express();
+
+// Definir o limite de tamanho de upload
+app.use(bodyParser.json({ limit: "10mb" })); // Ajuste conforme necessário (10mb é só um exemplo)
+app.use(bodyParser.urlencoded({ limit: "10mb", extended: true }));
 
 // Middlewares
 app.use(express.json());    

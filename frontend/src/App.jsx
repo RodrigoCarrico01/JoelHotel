@@ -6,6 +6,7 @@ import Profile from "./pages/Profile";
 import Dashboard from "./pages/Dashboard";
 import Rooms from "./pages/Rooms";
 import RoomDetails from "./pages/RoomDetails";
+import MyReservations from "./pages/MyReservations";
 import RequireAuth from "./middleware/RequireAuth";
 import Navbar from "./components/Navbar";
 
@@ -24,6 +25,7 @@ function App() {
         <Route element={<RequireAuth />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/my-reservations" element={<MyReservations />} />
         </Route>
       </Routes>
     </>
