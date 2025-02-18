@@ -5,7 +5,7 @@ const bcrypt = require("bcryptjs");
 //**Criar conta **
 const registerUser = async (req, res) => {
     try {
-        const { nome, email, password } = req.body;
+        const { nome, email, password, role } = req.body;
 
         const userExists = await User.findOne({ email });
         if (userExists) {
@@ -13,6 +13,7 @@ const registerUser = async (req, res) => {
         }
 
         const user = await User.create({ nome, email, password });
+        const token = generateToken(user._id, user.role); // Passar a role para o token
 
         res.status(201).json({
             _id: user._id,
@@ -20,7 +21,7 @@ const registerUser = async (req, res) => {
             email: user.email,
             role: user.role,
             profilePic: user.profilePic,
-            token: generateToken(user._id),
+            token: token,
         });
     } catch (error) {
         res.status(500).json({ message: "Erro ao registar utilizador.", error });
@@ -36,13 +37,15 @@ const loginUser = async (req, res) => {
             return res.status(401).json({ message: "Credenciais inválidas." });
         }
 
+        const token = generateToken(user._id, user.role); // Passar a role para o token
+
         res.json({
             _id: user._id,
             nome: user.nome,
             email: user.email,
             role: user.role,
             profilePic: user.profilePic,
-            token: generateToken(user._id),
+            token: token,
         });
     } catch (error) {
         res.status(500).json({ message: "Erro ao fazer login.", error });
@@ -50,8 +53,14 @@ const loginUser = async (req, res) => {
 };
 
 //**Gerar token**
-const generateToken = (id) => {
-    return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "7d" });
+const generateToken = (id, role) => {
+    // Aqui adicionamos a role ao payload do token
+    const user = {
+        id,
+        role, // Adicionando a role no payload do token
+    };
+
+    return jwt.sign(user, process.env.JWT_SECRET, { expiresIn: "7d" }); // Configuração do token para expirar em 7 dias
 };
 
 module.exports = { registerUser, loginUser };

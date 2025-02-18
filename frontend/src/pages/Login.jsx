@@ -19,7 +19,7 @@ function Login() {
       localStorage.setItem("token", response.data.token);
       setNotification({ message: "Login bem-sucedido! Redirecionando...", type: "success" });
 
-      setTimeout(() => navigate("/dashboard"), 2000);
+      setTimeout(() => navigate("/"), 2000);
     } catch (err) {
       setNotification({ message: "Credenciais inválidas. Tente novamente.", type: "error" });
     }
