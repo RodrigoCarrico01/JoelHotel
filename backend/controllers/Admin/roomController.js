@@ -1,9 +1,13 @@
 const Room = require("../../models/Room");
 
-// **Criar um novo quarto (apenas admins)**
 const createRoom = async (req, res) => {
     try {
         const { nome, descricao, imagem, numeroQuarto, precoPorNoite, status } = req.body;
+
+        // Verificar se o número do quarto foi fornecido
+        if (!numeroQuarto || numeroQuarto.trim() === "") {
+            return res.status(400).json({ message: "O número do quarto é obrigatório." });
+        }
 
         // Verificar se o quarto já existe
         const roomExists = await Room.findOne({ numeroQuarto });
@@ -11,6 +15,7 @@ const createRoom = async (req, res) => {
             return res.status(400).json({ message: "Este número de quarto já está registado." });
         }
 
+        // Criar o quarto
         const room = new Room({
             nome,
             descricao,
@@ -23,9 +28,11 @@ const createRoom = async (req, res) => {
         await room.save();
         res.status(201).json(room);
     } catch (error) {
+        console.error("Erro ao criar quarto:", error);
         res.status(500).json({ message: "Erro ao criar quarto.", error });
     }
 };
+
 
 // **Atualizar um quarto (apenas admins)**
 const updateRoom = async (req, res) => {

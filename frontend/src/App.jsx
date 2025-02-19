@@ -14,6 +14,8 @@ import AdminUsers from "./pages/Admin/AdminUsers";  // Nova rota para gestão de
 import AdminReservations from "./pages/Admin/AdminReservations";  // Nova rota para gestão de reservas admin
 import AdminReviews from "./pages/Admin/AdminReviews";  // Nova rota para gestão de utilizadores admin
 import AdminDashboard from "./pages/Admin/AdminDashboard"; // Importando a página do Dashboard Admin
+import CreateRoom from "./pages/Admin/CreateRoom";  // Nova rota para criação de quartos
+import EditRoom from "./pages/Admin/EditRoom";  // Nova rota para editar quartos
 
 function App() {
   return (
@@ -35,6 +37,8 @@ function App() {
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/admin/users" element={<AdminUsers />} />
             <Route path="/admin/rooms" element={<AdminRooms />} />
+            <Route path="/admin/rooms/create" element={<CreateRoom />} />
+            <Route path="/admin/rooms/:id/edit" element={<EditRoom />} />
             <Route path="/admin/reservations" element={<AdminReservations />} />
             <Route path="/admin/reviews" element={<AdminReviews />} />
           </Route>

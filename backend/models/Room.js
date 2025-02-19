@@ -20,6 +20,7 @@ const RoomSchema = new mongoose.Schema(
             type: String,
             required: [true, "O número do quarto é obrigatório"],
             unique: true,
+            trim: true,    
         },
         precoPorNoite: {
             type: Number,
