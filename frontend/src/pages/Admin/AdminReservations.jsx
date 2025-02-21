@@ -4,10 +4,12 @@ import { useNavigate } from "react-router-dom";
 
 function AdminReservations() {
   const [reservations, setReservations] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [message, setMessage] = useState("");
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
 
+  // Carregar as reservas do servidor
   useEffect(() => {
     const fetchReservations = async () => {
       try {
@@ -16,7 +18,7 @@ function AdminReservations() {
         });
         setReservations(response.data);
       } catch (error) {
-        setMessage(error.response?.data?.message || "Erro ao carregar reservas.");
+        setMessage("Erro ao carregar as reservas.");
         if (error.response?.status === 403) {
           navigate("/");
         }
@@ -30,35 +32,42 @@ function AdminReservations() {
     }
   }, [token, navigate]);
 
+  // Filtrar as reservas com base na pesquisa
+  const filteredReservations = reservations.filter(
+    (reservation) =>
+      reservation.utilizador.nome.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      reservation.quarto.numeroQuarto.includes(searchQuery)
+  );
+
+  // Atualizar uma reserva (Alterar status e pagamento)
+  const handleUpdateReservation = async (id, status, pago) => {
+    try {
+      await axios.put(
+        `http://localhost:5000/api/admin/reservations/${id}`,
+        { status, pago },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setMessage("Reserva atualizada com sucesso.");
+      setReservations(reservations.map((reservation) =>
+        reservation._id === id
+          ? { ...reservation, status, pago }
+          : reservation
+      ));
+    } catch (error) {
+      setMessage("Erro ao atualizar reserva.");
+    }
+  };
+
+  // Deletar uma reserva
   const handleDeleteReservation = async (id) => {
     try {
       await axios.delete(`http://localhost:5000/api/admin/reservations/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setReservations(reservations.filter((reservation) => reservation._id !== id)); // Remove a reserva da lista
-      setMessage("Reserva eliminada com sucesso!");
+      setReservations(reservations.filter((reservation) => reservation._id !== id));
+      setMessage("Reserva eliminada com sucesso.");
     } catch (error) {
       setMessage("Erro ao eliminar reserva.");
-    }
-  };
-
-  const handleUpdateReservation = async (id, status) => {
-    try {
-      await axios.put(
-        `http://localhost:5000/api/admin/reservations/${id}`,
-        { status },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      setMessage("Status da reserva atualizado!");
-      setReservations(
-        reservations.map((reservation) =>
-          reservation._id === id ? { ...reservation, status } : reservation
-        )
-      );
-    } catch (error) {
-      setMessage("Erro ao atualizar status da reserva.");
     }
   };
 
@@ -66,27 +75,56 @@ function AdminReservations() {
     <div>
       <h2>Gestão de Reservas</h2>
       {message && <p>{message}</p>}
+
+      {/* Campo de pesquisa */}
+      <input
+        type="text"
+        placeholder="Pesquisar por nome do utilizador ou número do quarto"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        className="mb-4 p-2 border rounded"
+      />
+
+      <h3>Lista de Reservas</h3>
       <table>
         <thead>
           <tr>
+            <th>Utilizador</th>
             <th>Quarto</th>
-            <th>Data de Check-in</th>
-            <th>Data de Check-out</th>
+            <th>Data Check-In</th>
+            <th>Data Check-Out</th>
             <th>Status</th>
+            <th>Pago</th>
             <th>Ações</th>
           </tr>
         </thead>
         <tbody>
-          {reservations.map((reservation) => (
+          {filteredReservations.map((reservation) => (
             <tr key={reservation._id}>
-              <td>{reservation.quarto.nome}</td>
+              <td>{reservation.utilizador.nome}</td>
+              <td>{reservation.quarto.numeroQuarto}</td>
               <td>{new Date(reservation.dataCheckIn).toLocaleDateString()}</td>
               <td>{new Date(reservation.dataCheckOut).toLocaleDateString()}</td>
               <td>{reservation.status}</td>
+              <td>{reservation.pago ? "Sim" : "Não"}</td>
               <td>
-                <button onClick={() => handleUpdateReservation(reservation._id, "confirmada")}>Confirmar</button>
-                <button onClick={() => handleUpdateReservation(reservation._id, "cancelada")}>Cancelar</button>
-                <button onClick={() => handleDeleteReservation(reservation._id)}>Eliminar</button>
+                <button
+                  onClick={() => navigate(`/admin/reservations/${reservation._id}`)}
+                >
+                  Ver Detalhes
+                </button>
+                <button
+                  onClick={() => handleUpdateReservation(reservation._id, "confirmada", true)}
+                  style={{ backgroundColor: "green", color: "white" }}
+                >
+                  Confirmar
+                </button>
+                <button
+                  onClick={() => handleDeleteReservation(reservation._id)}
+                  style={{ backgroundColor: "red", color: "white" }}
+                >
+                  Eliminar
+                </button>
               </td>
             </tr>
           ))}

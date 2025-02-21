@@ -4,8 +4,12 @@ import Notification from "../components/Notification";
 
 function MyReservations() {
   const [reservations, setReservations] = useState([]);
+  const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(true);
   const [notification, setNotification] = useState({ message: "", type: "" });
+  const [selectedRoom, setSelectedRoom] = useState("");
+  const [checkInDate, setCheckInDate] = useState("");
+  const [checkOutDate, setCheckOutDate] = useState("");
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -22,7 +26,17 @@ function MyReservations() {
       }
     };
 
+    const fetchRooms = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/rooms");
+        setRooms(response.data);
+      } catch (err) {
+        setNotification({ message: "Erro ao carregar os quartos.", type: "error" });
+      }
+    };
+
     fetchReservations();
+    fetchRooms();
   }, [token]);
 
   const handleCancelReservation = async (id) => {
@@ -35,6 +49,30 @@ function MyReservations() {
       setNotification({ message: "Reserva cancelada com sucesso!", type: "success" });
     } catch (err) {
       setNotification({ message: "Erro ao cancelar a reserva.", type: "error" });
+    }
+  };
+
+  const handleCreateReservation = async (e) => {
+    e.preventDefault();
+
+    if (!selectedRoom || !checkInDate || !checkOutDate) {
+      setNotification({ message: "Preencha todos os campos!", type: "error" });
+      return;
+    }
+
+    try {
+      await axios.post(
+        "http://localhost:5000/api/reservations",
+        { quarto: selectedRoom, dataCheckIn: checkInDate, dataCheckOut: checkOutDate },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      setNotification({ message: "Reserva criada com sucesso!", type: "success" });
+      setSelectedRoom("");
+      setCheckInDate("");
+      setCheckOutDate("");
+    } catch (err) {
+      setNotification({ message: "Erro ao criar a reserva.", type: "error" });
     }
   };
 
@@ -58,13 +96,36 @@ function MyReservations() {
               <p><strong>Status:</strong> {reservation.status}</p>
               {reservation.status === "pendente" && (
                 <button onClick={() => handleCancelReservation(reservation._id)} style={{ backgroundColor: "red", color: "white" }}>
-                  Apagar Reserva
+                  Cancelar Reserva
                 </button>
               )}
             </div>
           ))}
         </div>
       )}
+
+      <h3>Fazer uma Nova Reserva</h3>
+      <form onSubmit={handleCreateReservation} style={{ display: "flex", flexDirection: "column", gap: "10px", maxWidth: "400px" }}>
+        <label>Escolha um quarto:</label>
+        <select value={selectedRoom} onChange={(e) => setSelectedRoom(e.target.value)} required>
+          <option value="">Selecione um quarto</option>
+          {rooms.map((room) => (
+            <option key={room._id} value={room._id}>
+              {room.nome} - Quarto {room.numeroQuarto} - {room.precoPorNoite}€
+            </option>
+          ))}
+        </select>
+
+        <label>Data de Check-in:</label>
+        <input type="date" value={checkInDate} onChange={(e) => setCheckInDate(e.target.value)} required />
+
+        <label>Data de Check-out:</label>
+        <input type="date" value={checkOutDate} onChange={(e) => setCheckOutDate(e.target.value)} required />
+
+        <button type="submit" style={{ backgroundColor: "green", color: "white", padding: "10px", borderRadius: "5px" }}>
+          Reservar
+        </button>
+      </form>
     </div>
   );
 }
