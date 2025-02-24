@@ -26,15 +26,37 @@ function Login() {
   };
 
   return (
-    <div>
-      <Notification message={notification.message} type={notification.type} onClose={() => setNotification({ message: "", type: "" })} />
-
-      <h2>Login</h2>
-      <form onSubmit={handleLogin}>
-        <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-        <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-        <button type="submit">Entrar</button>
-      </form>
+    <div className="flex justify-center items-center h-screen bg-color1">
+      <div className="bg-white p-6 rounded-lg shadow-md w-96">
+        <Notification message={notification.message} type={notification.type} onClose={() => setNotification({ message: "", type: "" })} />
+        
+        <h2 className="text-2xl font-bold text-color4 mb-4 text-center">Login no JoelHotel</h2>
+        
+        <form onSubmit={handleLogin} className="flex flex-col gap-4">
+          <input 
+            type="email" 
+            placeholder="Email" 
+            value={email} 
+            onChange={(e) => setEmail(e.target.value)} 
+            required 
+            className="border p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-color3"
+          />
+          <input 
+            type="password" 
+            placeholder="Password" 
+            value={password} 
+            onChange={(e) => setPassword(e.target.value)} 
+            required 
+            className="border p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-color3"
+          />
+          <button 
+            type="submit" 
+            className="bg-color4 text-white p-2 rounded-md hover:bg-color3 transition"
+          >
+            Entrar
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

@@ -29,16 +29,45 @@ function Register() {
   };
 
   return (
-    <div>
-      <Notification message={notification.message} type={notification.type} onClose={() => setNotification({ message: "", type: "" })} />
-
-      <h2>Registar Conta</h2>
-      <form onSubmit={handleRegister}>
-        <input type="text" placeholder="Nome" value={nome} onChange={(e) => setNome(e.target.value)} required />
-        <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-        <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-        <button type="submit">Registar</button>
-      </form>
+    <div className="flex justify-center items-center h-screen bg-color1">
+      <div className="bg-white p-6 rounded-lg shadow-md w-96">
+        <Notification message={notification.message} type={notification.type} onClose={() => setNotification({ message: "", type: "" })} />
+        
+        <h2 className="text-2xl font-bold text-color4 mb-4 text-center">Registar no JoelHotel</h2>
+        
+        <form onSubmit={handleRegister} className="flex flex-col gap-4">
+          <input 
+            type="text" 
+            placeholder="Nome" 
+            value={nome} 
+            onChange={(e) => setNome(e.target.value)} 
+            required 
+            className="border p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-color3"
+          />
+          <input 
+            type="email" 
+            placeholder="Email" 
+            value={email} 
+            onChange={(e) => setEmail(e.target.value)} 
+            required 
+            className="border p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-color3"
+          />
+          <input 
+            type="password" 
+            placeholder="Password" 
+            value={password} 
+            onChange={(e) => setPassword(e.target.value)} 
+            required 
+            className="border p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-color3"
+          />
+          <button 
+            type="submit" 
+            className="bg-color4 text-white p-2 rounded-md hover:bg-color3 transition"
+          >
+            Registar
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
