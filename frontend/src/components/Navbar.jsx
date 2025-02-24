@@ -13,27 +13,36 @@ function Navbar() {
   };
 
   return (
-    <nav>
-      <ul>
-        <li><Link to="/">Home</Link></li>
-        <li><Link to="/rooms">Quartos</Link></li>
+    <nav className="bg-color4 text-white py-4 px-6 shadow-md">
+      <div className="container mx-auto flex justify-between items-center">
+        <Link to="/" className="text-color6 text-xl font-bold">JoelHotel</Link>
         
-        {/* Se o usuário não estiver autenticado */}
-        {!token ? (
-          <>
-            <li><Link to="/login">Login</Link></li>
-            <li><Link to="/register">Registar</Link></li>
-          </>
-        ) : (
-          <>
-            {/* Exibe o link do Dashboard apenas se o papel for admin */}
-            {user?.role === "admin" && <li><Link to="/dashboard">Dashboard</Link></li>}
-            <li><Link to="/profile">Meu Perfil</Link></li>
-            <li><Link to="/my-reservations">Minhas Reservas</Link></li>
-            <li><button onClick={handleLogout}>Logout</button></li>
-          </>
-        )}
-      </ul>
+        <ul className="flex gap-4">
+          <li><Link to="/" className="text-color6 hover:text-color">Home</Link></li>
+          <li><Link to="/rooms" className="text-color6 hover:text-color3">Quartos</Link></li>
+          
+          {!token ? (
+            <>
+              <li><Link to="/login" className="text-color6 hover:text-color3">Login</Link></li>
+              <li><Link to="/register" className="text-color6 hover:text-color3">Registar</Link></li>
+            </>
+          ) : (
+            <>
+              {user?.role === "admin" && <li><Link to="/dashboard" className="text-color6 hover:text-color3">Dashboard</Link></li>}
+              <li><Link to="/profile" className="text-color6 hover:text-color3">Meu Perfil</Link></li>
+              <li><Link to="/my-reservations" className="text-color6 hover:text-color3">Minhas Reservas</Link></li>
+              <li>
+                <button 
+                  onClick={handleLogout} 
+                  className="bg-red-500 px-3 py-1 rounded-md hover:bg-red-600 transition"
+                >
+                  Logout
+                </button>
+              </li>
+            </>
+          )}
+        </ul>
+      </div>
     </nav>
   );
 }

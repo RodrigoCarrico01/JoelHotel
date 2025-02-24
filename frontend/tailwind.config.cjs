@@ -12,7 +12,7 @@ module.exports = {
         color3: '#61ada0',
         color4: '#248f8d',
         color5: '#605063',
-        color6: '#ffffff',
+        color6: '#ffffff',  
       },
     },
   },
