@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 function AdminUsers() {
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
-  const [searchQuery, setSearchQuery] = useState(""); // Para armazenar a query de pesquisa
+  const [searchQuery, setSearchQuery] = useState(""); 
   const [message, setMessage] = useState("");
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ function AdminUsers() {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUsers(response.data);
-        setFilteredUsers(response.data); // Inicialmente, mostra todos os utilizadores
+        setFilteredUsers(response.data);
       } catch (error) {
         setMessage(error.response?.data?.message || "Erro ao carregar utilizadores.");
         if (error.response?.status === 403) {
@@ -39,6 +39,7 @@ function AdminUsers() {
         headers: { Authorization: `Bearer ${token}` },
       });
       setUsers(users.filter((user) => user._id !== id));
+      setFilteredUsers(filteredUsers.filter((user) => user._id !== id));
       setMessage("Utilizador eliminado com sucesso!");
     } catch (error) {
       setMessage("Erro ao eliminar utilizador.");
@@ -52,47 +53,54 @@ function AdminUsers() {
       user.email.toLowerCase().includes(e.target.value.toLowerCase()) ||
       user.role.toLowerCase().includes(e.target.value.toLowerCase())
     );
-    setFilteredUsers(filtered); // Atualiza os utilizadores filtrados com base na pesquisa
+    setFilteredUsers(filtered);
   };
 
   return (
-    <div>
-      <h2>Gestão de Utilizadores</h2>
-      {message && <p>{message}</p>}
+    <div className="container mx-auto p-6">
+      <h2 className="text-3xl font-bold text-color4 text-center mb-6">Gestão de Utilizadores</h2>
+      {message && <p className={`text-center mb-4 ${message.includes("sucesso") ? "text-green-600" : "text-red-500"}`}>{message}</p>}
 
       {/* Campo de pesquisa */}
-      <input
-        type="text"
-        placeholder="Pesquisar.."
-        value={searchQuery}
-        onChange={handleSearch}
-        className="mb-4 p-2 border rounded"
-      />
+      <div className="mb-6 flex justify-center">
+        <input
+          type="text"
+          placeholder="Pesquisar..."
+          value={searchQuery}
+          onChange={handleSearch}
+          className="p-2 border rounded-md w-full md:w-1/2"
+        />
+      </div>
 
-      <table>
-        <thead>
-          <tr>
-            <th>Nome</th>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredUsers.map((user) => (
-            <tr key={user._id}>
-              <td>{user.nome}</td>
-              <td>{user.email}</td>
-              <td>{user.role}</td>
-              <td>
-                <button onClick={() => handleDeleteUser(user._id)} style={{ backgroundColor: "red", color: "white" }}>
-                  Eliminar
-                </button>
-              </td>
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse border border-gray-300">
+          <thead>
+            <tr className="bg-gray-200">
+              <th className="border border-gray-300 p-2">Nome</th>
+              <th className="border border-gray-300 p-2">Email</th>
+              <th className="border border-gray-300 p-2">Role</th>
+              <th className="border border-gray-300 p-2">Ações</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {filteredUsers.map((user) => (
+              <tr key={user._id} className="text-center">
+                <td className="border border-gray-300 p-2">{user.nome}</td>
+                <td className="border border-gray-300 p-2">{user.email}</td>
+                <td className="border border-gray-300 p-2">{user.role}</td>
+                <td className="border border-gray-300 p-2">
+                  <button
+                    onClick={() => handleDeleteUser(user._id)}
+                    className="bg-red-500 text-white px-4 py-1 rounded-md hover:bg-red-600 transition"
+                  >
+                    Eliminar
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

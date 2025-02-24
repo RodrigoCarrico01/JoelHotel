@@ -60,14 +60,18 @@ function AdminReviews() {
   });
 
   return (
-    <div>
+    <div className="container mx-auto p-6">
       <Notification message={notification.message} type={notification.type} onClose={() => setNotification({ message: "", type: "" })} />
 
-      <h2>Gestão de Reviews</h2>
+      <h2 className="text-3xl font-bold text-color4 text-center mb-6">Gestão de Reviews</h2>
 
       {/* Campo de pesquisa */}
-      <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
-        <select value={filterType} onChange={(e) => setFilterType(e.target.value)}>
+      <div className="mb-6 flex flex-col md:flex-row items-center gap-4">
+        <select 
+          value={filterType} 
+          onChange={(e) => setFilterType(e.target.value)} 
+          className="p-2 border rounded-md w-full md:w-1/4"
+        >
           <option value="all">Todas</option>
           <option value="id">Por ID da Review</option>
           <option value="quarto">Por ID do Quarto</option>
@@ -78,36 +82,41 @@ function AdminReviews() {
           placeholder="Pesquisar..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
+          className="p-2 border rounded-md w-full md:w-1/2"
         />
       </div>
 
-      <h3>Lista de Reviews</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Utilizador</th>
-            <th>Quarto</th>
-            <th>Classificação</th>
-            <th>Comentário</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredReviews.map((review) => (
-            <tr key={review._id}>
-              <td>{review.utilizador.nome}</td>
-              <td>{review.quarto.nome}</td>
-              <td>{review.classificacao}⭐</td>
-              <td>{review.comentario}</td>
-              <td>
-                <button onClick={() => handleDeleteReview(review._id)} style={{ backgroundColor: "red", color: "white" }}>
-                  Eliminar
-                </button>
-              </td>
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse border border-gray-300">
+          <thead>
+            <tr className="bg-gray-200">
+              <th className="border border-gray-300 p-2">Utilizador</th>
+              <th className="border border-gray-300 p-2">Quarto</th>
+              <th className="border border-gray-300 p-2">Classificação</th>
+              <th className="border border-gray-300 p-2">Comentário</th>
+              <th className="border border-gray-300 p-2">Ações</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {filteredReviews.map((review) => (
+              <tr key={review._id} className="text-center">
+                <td className="border border-gray-300 p-2">{review.utilizador.nome}</td>
+                <td className="border border-gray-300 p-2">{review.quarto.nome}</td>
+                <td className="border border-gray-300 p-2">{review.classificacao}⭐</td>
+                <td className="border border-gray-300 p-2">{review.comentario}</td>
+                <td className="border border-gray-300 p-2">
+                  <button
+                    onClick={() => handleDeleteReview(review._id)}
+                    className="bg-red-500 text-white px-4 py-1 rounded-md hover:bg-red-600 transition"
+                  >
+                    Eliminar
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

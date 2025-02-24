@@ -9,7 +9,6 @@ function AdminReservations() {
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
 
-  // Carregar as reservas do servidor
   useEffect(() => {
     const fetchReservations = async () => {
       try {
@@ -32,14 +31,12 @@ function AdminReservations() {
     }
   }, [token, navigate]);
 
-  // Filtrar as reservas com base na pesquisa
   const filteredReservations = reservations.filter(
     (reservation) =>
       reservation.utilizador.nome.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      reservation.quarto.numeroQuarto.includes(searchQuery)
+      reservation.quarto.numeroQuarto.toString().includes(searchQuery)
   );
 
-  // Atualizar uma reserva (Alterar status e pagamento)
   const handleUpdateReservation = async (id, status, pago) => {
     try {
       await axios.put(
@@ -58,7 +55,6 @@ function AdminReservations() {
     }
   };
 
-  // Deletar uma reserva
   const handleDeleteReservation = async (id) => {
     try {
       await axios.delete(`http://localhost:5000/api/admin/reservations/${id}`, {
@@ -72,64 +68,66 @@ function AdminReservations() {
   };
 
   return (
-    <div>
-      <h2>Gestão de Reservas</h2>
-      {message && <p>{message}</p>}
+    <div className="container mx-auto p-6">
+      <h2 className="text-3xl font-bold text-color4 text-center mb-6">Gestão de Reservas</h2>
+      {message && <p className="text-center text-lg text-gray-600">{message}</p>}
 
       {/* Campo de pesquisa */}
-      <input
-        type="text"
-        placeholder="Pesquisar por nome do utilizador ou número do quarto"
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-        className="mb-4 p-2 border rounded"
-      />
+      <div className="mb-6 flex justify-center">
+        <input
+          type="text"
+          placeholder="Pesquisar por nome do utilizador ou número do quarto"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="p-2 border rounded-md w-full md:w-1/2"
+        />
+      </div>
 
-      <h3>Lista de Reservas</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Utilizador</th>
-            <th>Quarto</th>
-            <th>Data Check-In</th>
-            <th>Data Check-Out</th>
-            <th>Status</th>
-            <th>Pago</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredReservations.map((reservation) => (
-            <tr key={reservation._id}>
-              <td>{reservation.utilizador.nome}</td>
-              <td>{reservation.quarto.numeroQuarto}</td>
-              <td>{new Date(reservation.dataCheckIn).toLocaleDateString()}</td>
-              <td>{new Date(reservation.dataCheckOut).toLocaleDateString()}</td>
-              <td>{reservation.status}</td>
-              <td>{reservation.pago ? "Sim" : "Não"}</td>
-              <td>
-                <button
-                  onClick={() => navigate(`/admin/reservations/${reservation._id}`)}
-                >
-                  Ver Detalhes
-                </button>
-                <button
-                  onClick={() => handleUpdateReservation(reservation._id, "confirmada", true)}
-                  style={{ backgroundColor: "green", color: "white" }}
-                >
-                  Confirmar
-                </button>
-                <button
-                  onClick={() => handleDeleteReservation(reservation._id)}
-                  style={{ backgroundColor: "red", color: "white" }}
-                >
-                  Eliminar
-                </button>
-              </td>
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse border border-gray-300">
+          <thead>
+            <tr className="bg-gray-200">
+              <th className="border border-gray-300 p-2">Utilizador</th>
+              <th className="border border-gray-300 p-2">Quarto</th>
+              <th className="border border-gray-300 p-2">Check-In</th>
+              <th className="border border-gray-300 p-2">Check-Out</th>
+              <th className="border border-gray-300 p-2">Status</th>
+              <th className="border border-gray-300 p-2">Pago</th>
+              <th className="border border-gray-300 p-2">Ações</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {filteredReservations.map((reservation) => (
+              <tr key={reservation._id} className="text-center">
+                <td className="border border-gray-300 p-2">{reservation.utilizador.nome}</td>
+                <td className="border border-gray-300 p-2">{reservation.quarto.numeroQuarto}</td>
+                <td className="border border-gray-300 p-2">{new Date(reservation.dataCheckIn).toLocaleDateString()}</td>
+                <td className="border border-gray-300 p-2">{new Date(reservation.dataCheckOut).toLocaleDateString()}</td>
+                <td className={`border border-gray-300 p-2 font-semibold ${reservation.status === "pendente" ? "text-yellow-500" : "text-green-500"}`}>
+                  {reservation.status}
+                </td>
+                <td className={`border border-gray-300 p-2 ${reservation.pago ? "text-green-600" : "text-red-500"}`}>
+                  {reservation.pago ? "Sim" : "Não"}
+                </td>
+                <td className="border border-gray-300 p-2 flex flex-col space-y-2">
+                  <button
+                    onClick={() => handleUpdateReservation(reservation._id, "confirmada", true)}
+                    className="bg-green-500 text-white px-4 py-1 rounded-md hover:bg-green-600 transition"
+                  >
+                    Confirmar
+                  </button>
+                  <button
+                    onClick={() => handleDeleteReservation(reservation._id)}
+                    className="bg-red-500 text-white px-4 py-1 rounded-md hover:bg-red-600 transition"
+                  >
+                    Eliminar
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

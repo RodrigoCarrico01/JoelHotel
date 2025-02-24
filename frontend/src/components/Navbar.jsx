@@ -28,7 +28,7 @@ function Navbar() {
             </>
           ) : (
             <>
-              {user?.role === "admin" && <li><Link to="/dashboard" className="text-color6 hover:text-color3">Dashboard</Link></li>}
+              {user?.role === "admin" && <li><Link to="/admin" className="text-color6 hover:text-color3">Dashboard</Link></li>}
               <li><Link to="/profile" className="text-color6 hover:text-color3">Meu Perfil</Link></li>
               <li><Link to="/my-reservations" className="text-color6 hover:text-color3">Minhas Reservas</Link></li>
               <li>

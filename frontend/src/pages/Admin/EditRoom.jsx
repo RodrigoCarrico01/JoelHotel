@@ -17,7 +17,6 @@ function EditRoom() {
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
 
-  // Carregar os dados do quarto para edição
   useEffect(() => {
     const fetchRoomData = async () => {
       try {
@@ -50,58 +49,99 @@ function EditRoom() {
         headers: { Authorization: `Bearer ${token}` },
       });
       setMessage("Quarto atualizado com sucesso!");
-      navigate("/admin/rooms"); // Redireciona para a lista de quartos
+      navigate("/admin/rooms");
     } catch (error) {
       setMessage("Erro ao atualizar quarto.");
     }
   };
 
-  if (!room) return <p>Carregando dados do quarto...</p>;
+  if (!room) return <p className="text-center text-lg text-gray-600">Carregando dados do quarto...</p>;
 
   return (
-    <div>
-      <h2>Editar Quarto: {room.nome}</h2>
-      {message && <p>{message}</p>}
-      <form onSubmit={handleEditRoom}>
-        <input
-          type="text"
-          placeholder="Nome"
-          value={updatedRoom.nome}
-          onChange={(e) => setUpdatedRoom({ ...updatedRoom, nome: e.target.value })}
-        />
-        <input
-          type="text"
-          placeholder="Descrição"
-          value={updatedRoom.descricao}
-          onChange={(e) => setUpdatedRoom({ ...updatedRoom, descricao: e.target.value })}
-        />
-        <input
-          type="text"
-          placeholder="Número do Quarto"
-          value={updatedRoom.numeroQuarto}
-          onChange={(e) => setUpdatedRoom({ ...updatedRoom, numeroQuarto: e.target.value })}
-        />
-        <input
-          type="number"
-          placeholder="Preço por noite"
-          value={updatedRoom.precoPorNoite}
-          onChange={(e) => setUpdatedRoom({ ...updatedRoom, precoPorNoite: e.target.value })}
-        />
-        <select
-          value={updatedRoom.status}
-          onChange={(e) => setUpdatedRoom({ ...updatedRoom, status: e.target.value })}
-        >
-          <option value="disponível">Disponível</option>
-          <option value="indisponível">Indisponível</option>
-        </select>
-        <input
-          type="text"
-          placeholder="Imagem URL"
-          value={updatedRoom.imagem}
-          onChange={(e) => setUpdatedRoom({ ...updatedRoom, imagem: e.target.value })}
-        />
-        <button type="submit">Atualizar Quarto</button>
-      </form>
+    <div className="flex justify-center items-center h-screen bg-color1">
+      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+        <h2 className="text-2xl font-bold text-color4 text-center mb-4">Editar Quarto: {room.nome}</h2>
+        {message && (
+          <p className={`text-center mb-4 ${message.includes("sucesso") ? "text-green-600" : "text-red-500"}`}>
+            {message}
+          </p>
+        )}
+        
+        <form onSubmit={handleEditRoom} className="space-y-4">
+          <div>
+            <label className="block font-semibold">Nome do Quarto:</label>
+            <input
+              type="text"
+              value={updatedRoom.nome}
+              onChange={(e) => setUpdatedRoom({ ...updatedRoom, nome: e.target.value })}
+              required
+              className="w-full border p-2 rounded-md focus:ring focus:outline-none"
+            />
+          </div>
+          
+          <div>
+            <label className="block font-semibold">Descrição:</label>
+            <textarea
+              value={updatedRoom.descricao}
+              onChange={(e) => setUpdatedRoom({ ...updatedRoom, descricao: e.target.value })}
+              required
+              className="w-full border p-2 rounded-md focus:ring focus:outline-none"
+            />
+          </div>
+          
+          <div>
+            <label className="block font-semibold">Número do Quarto:</label>
+            <input
+              type="text"
+              value={updatedRoom.numeroQuarto}
+              onChange={(e) => setUpdatedRoom({ ...updatedRoom, numeroQuarto: e.target.value })}
+              required
+              className="w-full border p-2 rounded-md focus:ring focus:outline-none"
+            />
+          </div>
+          
+          <div>
+            <label className="block font-semibold">Preço por Noite:</label>
+            <input
+              type="number"
+              value={updatedRoom.precoPorNoite}
+              onChange={(e) => setUpdatedRoom({ ...updatedRoom, precoPorNoite: e.target.value })}
+              required
+              className="w-full border p-2 rounded-md focus:ring focus:outline-none"
+            />
+          </div>
+          
+          <div>
+            <label className="block font-semibold">Status:</label>
+            <select
+              value={updatedRoom.status}
+              onChange={(e) => setUpdatedRoom({ ...updatedRoom, status: e.target.value })}
+              className="w-full border p-2 rounded-md focus:ring focus:outline-none"
+            >
+              <option value="disponível">Disponível</option>
+              <option value="indisponível">Indisponível</option>
+            </select>
+          </div>
+          
+          <div>
+            <label className="block font-semibold">Imagem URL:</label>
+            <input
+              type="text"
+              value={updatedRoom.imagem}
+              onChange={(e) => setUpdatedRoom({ ...updatedRoom, imagem: e.target.value })}
+              required
+              className="w-full border p-2 rounded-md focus:ring focus:outline-none"
+            />
+          </div>
+          
+          <button 
+            type="submit"
+            className="w-full bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition"
+          >
+            Atualizar Quarto
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

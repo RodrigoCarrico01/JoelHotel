@@ -9,7 +9,6 @@ function AdminRooms() {
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
 
-  // Carregar os quartos do servidor
   useEffect(() => {
     const fetchRooms = async () => {
       try {
@@ -32,14 +31,12 @@ function AdminRooms() {
     }
   }, [token, navigate]);
 
-  // Filtrar os quartos com base na pesquisa
   const filteredRooms = rooms.filter(
     (room) =>
       room.nome.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      room.numeroQuarto.includes(searchQuery)
+      room.numeroQuarto.toString().includes(searchQuery)
   );
 
-  // Função para excluir o quarto
   const handleDeleteRoom = async (roomId) => {
     try {
       const confirmDelete = window.confirm("Tem certeza que deseja excluir este quarto?");
@@ -47,7 +44,7 @@ function AdminRooms() {
         await axios.delete(`http://localhost:5000/api/admin/rooms/${roomId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setRooms(rooms.filter((room) => room._id !== roomId)); // Atualiza a lista de quartos
+        setRooms(rooms.filter((room) => room._id !== roomId));
         setMessage("Quarto excluído com sucesso!");
       }
     } catch (error) {
@@ -56,50 +53,68 @@ function AdminRooms() {
   };
 
   return (
-    <div>
-      <h2>Gestão de Quartos</h2>
-      {message && <p>{message}</p>}
+    <div className="container mx-auto p-6">
+      <h2 className="text-3xl font-bold text-color4 text-center mb-6">Gestão de Quartos</h2>
+      {message && <p className="text-center text-lg text-gray-600">{message}</p>}
 
       {/* Campo de pesquisa */}
-      <input
-        type="text"
-        placeholder="Pesquisar por nome ou número do quarto"
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-        className="mb-4 p-2 border rounded"
-      />
+      <div className="mb-6 flex justify-center">
+        <input
+          type="text"
+          placeholder="Pesquisar por nome ou número do quarto"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="p-2 border rounded-md w-full md:w-1/2"
+        />
+      </div>
 
-      <h3>Lista de Quartos</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Nome</th>
-            <th>Número do Quarto</th>
-            <th>Preço</th>
-            <th>Status</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredRooms.map((room) => (
-            <tr key={room._id}>
-              <td>{room.nome}</td>
-              <td>{room.numeroQuarto}</td>
-              <td>{room.precoPorNoite}€</td>
-              <td>{room.status}</td>
-              <td>
-                <button onClick={() => navigate(`/admin/rooms/${room._id}/edit`)}>Editar</button>
-                <button onClick={() => handleDeleteRoom(room._id)} style={{ backgroundColor: "red", color: "white" }}>
-                  Eliminar
-                </button>
-              </td>
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse border border-gray-300">
+          <thead>
+            <tr className="bg-gray-200">
+              <th className="border border-gray-300 p-2">Nome</th>
+              <th className="border border-gray-300 p-2">Número</th>
+              <th className="border border-gray-300 p-2">Preço</th>
+              <th className="border border-gray-300 p-2">Status</th>
+              <th className="border border-gray-300 p-2">Ações</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {filteredRooms.map((room) => (
+              <tr key={room._id} className="text-center">
+                <td className="border border-gray-300 p-2">{room.nome}</td>
+                <td className="border border-gray-300 p-2">{room.numeroQuarto}</td>
+                <td className="border border-gray-300 p-2">{room.precoPorNoite}€</td>
+                <td className="border border-gray-300 p-2">{room.status}</td>
+                <td className="border border-gray-300 p-2 flex flex-col space-y-2">
+                  <button 
+                    onClick={() => navigate(`/admin/rooms/${room._id}/edit`)}
+                    className="bg-blue-500 text-white px-4 py-1 rounded-md hover:bg-blue-600 transition"
+                  >
+                    Editar
+                  </button>
+                  <button
+                    onClick={() => handleDeleteRoom(room._id)}
+                    className="bg-red-500 text-white px-4 py-1 rounded-md hover:bg-red-600 transition"
+                  >
+                    Eliminar
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       {/* Botão de Criar Novo Quarto */}
-      <button onClick={() => navigate("/admin/rooms/create")}>Criar Novo Quarto</button>
+      <div className="flex justify-center mt-6">
+        <button 
+          onClick={() => navigate("/admin/rooms/create")}
+          className="bg-green-500 text-white px-6 py-2 rounded-md hover:bg-green-600 transition"
+        >
+          Criar Novo Quarto
+        </button>
+      </div>
     </div>
   );
 }
